@@ -18,6 +18,16 @@ Pour exécuter ce jeu, vous avez besoin de:
 ## Installation
 Suivez ces étapes pour récupérer et lancer le projet sur votre machine:
 
+1. Clonez le dépôt :
+   ```bash
+   git clone [https://github.com/Ry0ku/Projet-Meteore-Typer-Bash.git](https://github.com/Ry0ku/Projet-Meteore-Typer-Bash.git)
+   cd Projet-Meteore-Typer-Bash
+   chmod +x meteore.sh
+   ./meteore.sh 
+   ```
 
+## Auteur
+Ruben- Etudiant en informatique
+Linkedin:https://www.linkedin.com/in/ruben-tinant-32b15332b/
    
    
