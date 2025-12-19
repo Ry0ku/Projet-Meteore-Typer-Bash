@@ -12,13 +12,14 @@ R='\e[31m'; G='\e[32m'; Y='\e[33m'; B='\e[34m'; C='\e[36m'; NC='\e[0m'; BOLD='\e
 
 # --- LOGIQUE ---
 cleanup() { 
-    stty echo    # <--- INDISPENSABLE POUR RETROUVER TON TERMINAL
-    tput cnorm   # Remettre le curseur
+    stty echo    
+    tput cnorm   
     clear
     exit 
 }
 trap cleanup SIGINT
 
+#fonction d'apparition des météores
 spawn_meteor() {
     if [ "$MODE" == "maths" ]; then
         local ops=('+' '-' '*')
@@ -51,7 +52,7 @@ show_menu() {
     tput cnorm; clear
     echo -e "${R}${BOLD}"
     cat << 'EOF'
-          ___      ,----.  ,--.--------.    ,----.      _,.---._                   _,.---._     .=-.-.                ,----.  
+          ___      ,----.  ,--.--------.    ,----.      _,.---._                   _,.---._     .=-.-.               ,___.  
   .-._ .'=.'\  ,-.--` , \/==/,  -   , -\,-.--` , \  ,-.' , -  `.   .-.,.---.   ,-.' , -  `.  /==/_ /_,..---._   ,-.--` , \ 
  /==/ \|==|  ||==|-  _.-`\==\.-.  - ,-./==|-  _.-` /==/_,  ,  - \ /==/  `   \ /==/_,  ,  - \|==|, /==/,   -  \ |==|-  _.-` 
  |==|,|  / - ||==|   `.-. `--`\==\- \  |==|   `.-.|==|   .=.     |==|-, .=., |==|   .=.     |==|  |==|   _   _\|==|   `.-. 
@@ -123,9 +124,9 @@ start_game() {
         tput cup $SOL 0
         echo -e "${G}$(printf '%*s' "$LARG" '' | tr ' ' '#' )${NC}"
 
-# Lecture clavier (Validation AUTOMATIQUE et SILENCIEUSE)
+# Lecture clavier + validation automatique
         if read -t $VITESSE -n 1 touche; then
-            if [[ "$touche" == $'\x7f' ]]; then # Backspace
+            if [[ "$touche" == $'\x7f' ]]; then 
                 SAISIE="${SAISIE%?}"
             else
                 SAISIE+="$touche"
