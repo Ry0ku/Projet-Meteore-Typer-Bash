@@ -11,28 +11,27 @@ id_count=0
 R='\e[31m'; G='\e[32m'; Y='\e[33m'; B='\e[34m'; C='\e[36m'; NC='\e[0m'; BOLD='\e[1m'
 
 # --- LOGIQUE ---
-cleanup() { 
-    stty echo    
-    tput cnorm   
+cleanup() {
+    stty echo
+    tput cnorm
     clear
-    exit 
+    exit
 }
 trap cleanup SIGINT
 
-#fonction d'apparition des météores
 spawn_meteor() {
     if [ "$MODE" == "maths" ]; then
         local ops=('+' '-' '*')
         local op=${ops[$((RANDOM % 3))]}
 
         if [ "$op" == "*" ]; then
-	        local a=$((RANDOM % 11)); local b=$((RANDOM % 11))
+                local a=$((RANDOM % 11)); local b=$((RANDOM % 11))
         else
-		local a=$((RANDOM % 101)); local b=$((RANDOM % 101))
+                local a=$((RANDOM % 51)); local b=$((RANDOM % 51))
         fi
-        if [ "$op" == "-" ] && [ $a -lt $b ]; then 
-		local t=$a; a=$b; b=$t; 
-	fi
+        if [ "$op" == "-" ] && [ $a -lt $b ]; then
+                local t=$a; a=$b; b=$t;
+        fi
 
         texte[$id_count]="$a$op$b"
         resultat[$id_count]=$((a $op b))
@@ -52,15 +51,15 @@ show_menu() {
     tput cnorm; clear
     echo -e "${R}${BOLD}"
     cat << 'EOF'
-          ___      ,----.  ,--.--------.    ,----.      _,.---._                   _,.---._     .=-.-.               ,___.  
-  .-._ .'=.'\  ,-.--` , \/==/,  -   , -\,-.--` , \  ,-.' , -  `.   .-.,.---.   ,-.' , -  `.  /==/_ /_,..---._   ,-.--` , \ 
- /==/ \|==|  ||==|-  _.-`\==\.-.  - ,-./==|-  _.-` /==/_,  ,  - \ /==/  `   \ /==/_,  ,  - \|==|, /==/,   -  \ |==|-  _.-` 
- |==|,|  / - ||==|   `.-. `--`\==\- \  |==|   `.-.|==|   .=.     |==|-, .=., |==|   .=.     |==|  |==|   _   _\|==|   `.-. 
- |==|  \/  , /==/_ ,    /      \==\_ \/==/_ ,    /|==|_ : ;=:  - |==|   '='  /==|_ : ;=:  - |==|- |==|  .=.   /==/_ ,    / 
- |==|- ,   _ |==|    .-'        |==|- ||==|    .-' |==| , '='     |==|- ,   .'|==| , '='     |==| ,|==|,|   | -|==|    .-'  
- |==| _ /\   |==|_  ,`-._       |==|, ||==|_  ,`-._ \==\ -    ,_ /|==|_  . ,'. \==\ -    ,_ /|==|- |==|  '='   /==|_  ,`-._ 
- /==/  / / , /==/ ,     /       /==/ -//==/ ,     /  '.='. -   .' /==/  /\ ,  ) '.='. -   .' /==/. /==|-,   _`//==/ ,     / 
- `--`./  `--``--`-----``        `--`--``--`-----``     `--`--''   `--`-`--`--'    `--`--''   `--`-``-.`.____.' `--`-----``  
+          ___      ,----.  ,--.--------.    ,----.      _,.---._                   _,.---._     .=-.-.                ,----.
+  .-._ .'=.'\  ,-.--` , \/==/,  -   , -\,-.--` , \  ,-.' , -  `.   .-.,.---.   ,-.' , -  `.  /==/_ /_,..---._   ,-.--` , \
+ /==/ \|==|  ||==|-  _.-`\==\.-.  - ,-./==|-  _.-` /==/_,  ,  - \ /==/  `   \ /==/_,  ,  - \|==|, /==/,   -  \ |==|-  _.-`
+ |==|,|  / - ||==|   `.-. `--`\==\- \  |==|   `.-.|==|   .=.     |==|-, .=., |==|   .=.     |==|  |==|   _   _\|==|   `.-.
+ |==|  \/  , /==/_ ,    /      \==\_ \/==/_ ,    /|==|_ : ;=:  - |==|   '='  /==|_ : ;=:  - |==|- |==|  .=.   /==/_ ,    /
+ |==|- ,   _ |==|    .-'        |==|- ||==|    .-' |==| , '='     |==|- ,   .'|==| , '='     |==| ,|==|,|   | -|==|    .-'
+ |==| _ /\   |==|_  ,`-._       |==|, ||==|_  ,`-._ \==\ -    ,_ /|==|_  . ,'. \==\ -    ,_ /|==|- |==|  '='   /==|_  ,`-._
+ /==/  / / , /==/ ,     /       /==/ -//==/ ,     /  '.='. -   .' /==/  /\ ,  ) '.='. -   .' /==/. /==|-,   _`//==/ ,     /
+ `--`./  `--``--`-----``        `--`--``--`-----``     `--`--''   `--`-`--`--'    `--`--''   `--`-``-.`.____.' `--`-----``
 EOF
     echo -e "${NC}"
     echo -e "           ${Y}[1]${NC} Mode MOTS"
@@ -83,16 +82,18 @@ start_game() {
     SCORE=0; VIE=3; id_count=0; SAISIE=""
     unset pos_x pos_y texte resultat
     local compteur_spawn=0
+    local dernier_mouv=$(date +%s%N)
 
     while true; do
         # --- Système de Spawn Unique et Propre ---
+        local maintenant=$(date +%s%N)
         ((compteur_spawn++))
-        local delai_spawn=6
-        [ "$MODE" == "maths" ] && delai_spawn=5
+        local delai_spawn=10
+        [ "$MODE" == "maths" ] && delai_spawn=10
         $HARDCORE && delai_spawn=$((delai_spawn / 2))
 
         if [ $compteur_spawn -ge $delai_spawn ]; then
-            if [ ${#pos_y[@]} -lt 8 ]; then
+            if [ ${#pos_y[@]} -lt 6 ]; then
                 spawn_meteor
             fi
             compteur_spawn=0
@@ -101,14 +102,15 @@ start_game() {
         # Affichage Entête
         tput cup 0 0
         echo -e "${C}SCORE: $SCORE | VIES: $VIE | MODE: $MODE${NC}"
-        echo -e "SAISIE : ${Y}${SAISIE}${NC}           " 
+        echo -e "SAISIE : ${Y}${SAISIE}${NC}           "
         echo -e "${G}$(printf '%*s' "$LARG" '' | tr ' ' '-')${NC}"
 
         # Mouvement et Dessin
+     if (( (maintenant - dernier_mouv) > 400000000 )); then
         for i in "${!pos_y[@]}"; do
             # Effacer l ancienne position (assez d'espaces pour les mots longs)
-            tput cup ${pos_y[$i]} ${pos_x[$i]}; printf "                         " 
-            
+            tput cup ${pos_y[$i]} ${pos_x[$i]}; printf "                         "
+
             pos_y[$i]=$((pos_y[$i] + 1))
 
             if [[ ${pos_y[$i]} -ge $SOL ]]; then
@@ -117,19 +119,32 @@ start_game() {
                 [ $VIE -le 0 ] && break 2
                 continue
             fi
+
             tput cup ${pos_y[$i]} ${pos_x[$i]}
             echo -e "${R}${BOLD}[${texte[$i]}]${NC}"
+
         done
-       
+        dernier_mouv=$maintenant
+fi
+
         tput cup $SOL 0
         echo -e "${G}$(printf '%*s' "$LARG" '' | tr ' ' '#' )${NC}"
 
-# Lecture clavier + validation automatique
-        if read -t $VITESSE -n 1 touche; then
-            if [[ "$touche" == $'\x7f' ]]; then 
+# Lecture clavier (Validation AUTOMATIQUE et SILENCIEUSE)
+        if read -s -t 0.01 -n 1 touche; then
+                local code=$(printf '%d' "'$touche" 2>/dev/null || echo 0)
+
+            if [[ "$code" -eq 127 || "$code" -eq 8 || "$code" -eq 0 ]]; then
                 SAISIE="${SAISIE%?}"
+
+            elif [[ "$code" -eq 10 || "$code" -eq 13 ]]; then
+                SAISIE=""
+
+            # --- AJOUTER UN CARACTÈRE NORMAL ---
             else
-                SAISIE+="$touche"
+                if [ -n "$touche" ]; then
+                    SAISIE+="$touche"
+                fi
             fi
 
             # --- VERIFICATION AUTO ---
@@ -151,7 +166,7 @@ start_game() {
     echo -e "${R}${BOLD}GAME OVER !${NC}"
     echo -e "${C}Score final : $SCORE${NC}"
     sleep 3
-    show_menu
+show_menu
 }
 
 show_menu
