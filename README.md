@@ -4,7 +4,7 @@
 
 L'objectif est simple : détruire les météores en saisissant leur contenu avant qu'ils n'atteignent votre base (le bas de l'écran). Ce projet a été conçu pour valider les compétences de scripting, de gestion du temps réel et d'optimisation des entrées/sorties en terminal.
 
-## Descritption
+## Description
 Météore Typer est un script interactif conçu pour tester votre vitesse de frappe et votre agilité intellectuelle. Des météores tombent du ciel, et vous devez saisir le mot ou résoudre l'opération mathématique avant qu'ils ne touchent le sol.
 * Mode Mots : Idéal pour améliorer sa vitesse de frappe.
 * Mode Maths : Idéal pour s'entraîner au calcul mental rapide.
